@@ -12,13 +12,12 @@ class Combate:
         poke_jugador = self.jugador.activo
         poke_ia = self.ia.activo
 
-        # Determinar orden
         primero, segundo = (self.jugador, self.ia) if poke_jugador.get_estadistica("velocidad") >= poke_ia.get_estadistica("velocidad") else (self.ia, self.jugador)
         acciones = {self.jugador: ataque_jugador, self.ia: ataque_ia}
 
         for entrenador in [primero, segundo]:
             atacante = entrenador.activo
-            defensor = self.jugador.activo if entrenador == self.ia else self.ia.activo
+            defensor = self.ia.activo if entrenador == self.jugador else self.jugador.activo
             ataque = acciones[entrenador]
 
             if atacante.esta_debilitado():
@@ -30,10 +29,9 @@ class Combate:
 
             if defensor.esta_debilitado():
                 print(f"{defensor.nombre} ha sido debilitado!")
-                otro_entrenador = self.jugador if entrenador == self.ia else self.ia
-                if not otro_entrenador.cambiar_pokemon():
-                    print("¡El combate ha terminado!")
-                    return "fin"
+                return "debilitado"
+
+
 
         self.turno += 1
         return "continuar"
